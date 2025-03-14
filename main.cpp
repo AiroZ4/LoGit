@@ -6,15 +6,16 @@
 
 // Variables
 std::filesystem::path projects_path = "Test-Projects-Folder";
-std::string folder_name;
 std::filesystem::path full_path;
 std::string output;
 
+// Commands
+std::string create_command = "cdir";
+std::string delete_command = "ddir";
+
 
 // Functions
-void create_folder(){
-    std::cout << "Enter the name of the folder to create: ";
-    std::cin >> folder_name;
+void create_folder(std::string folder_name){
     full_path = projects_path / folder_name;
 
     std::cout << full_path << std::endl;
@@ -29,44 +30,46 @@ void create_folder(){
     }
     else {
         std::cout << "Something Went Wrong." << std::endl;
-    }
-
-    
+    }   
 }
 
-void delete_folder(){
-    std::cout << "Enter the folder you want to delete: ";
-    std::cin >> folder_name;
+void delete_folder(std::string folder_name){
     full_path = projects_path / folder_name;
 
     if (std::filesystem::exists(full_path)){
         std::filesystem::remove(full_path);
+        std::cout << "Directory: " << full_path << std::endl;
     }
     else {
         std::cout << "The file you are trying to delete does not exist." << std::endl;
     }
 }
 
-int main() {
-
-    std::cout << "Would you like to Create or Delete a folder? (C, D): ";
-    std::cin >> output;
-
-    if (output == "c" || output == "C"){
-        // Create folder
-        create_folder();
-
-
-        std::cout << "Folder creation process completed!" << std::endl;
-        std::cout << "Press Enter to exit..." << std::endl;
-        std::cin.ignore();
+// Main function
+int main(int argc, char *argv[]) {
+    
+    if (argc < 2){
+        std::cout << "Usage: logit <command> [args]\n";
+        return 1;
     }
-    else if (output == "d" || output == "D"){
-        delete_folder();
 
-        std::cout << "Folder Deletion Complete!" << std::endl;
-        std::cout << "Press Enter to exit..." << std::endl;
-        std::cin.ignore();
+    std::string command = argv[1];
+
+    if (command == create_command){
+        if (argc < 3){
+            std::cout << "Missing folder name.";
+            return 1;
+        }
+
+        create_folder(argv[2]);
+    }
+    else if (command == delete_command){
+        if (argc < 3){
+            std::cout << "Missing folder name.";
+            return 1;
+        }
+
+        delete_folder(argv[2]);
     }
 
     return 0;
