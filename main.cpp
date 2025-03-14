@@ -7,12 +7,15 @@
 // Variables
 std::filesystem::path projects_path = "Test-Projects-Folder";
 std::string folder_name;
+std::filesystem::path full_path;
+std::string output;
 
 
 // Functions
 void create_folder(){
-
-    std::filesystem::path full_path = "Test-Projects-Folder/" + folder_name;
+    std::cout << "Enter the name of the folder to create: ";
+    std::cin >> folder_name;
+    full_path = projects_path / folder_name;
 
     std::cout << full_path << std::endl;
 
@@ -31,19 +34,40 @@ void create_folder(){
     
 }
 
-int main() {
-    std::cout << "Enter the name of the folder to create: ";
+void delete_folder(){
+    std::cout << "Enter the folder you want to delete: ";
     std::cin >> folder_name;
-    projects_path = std::filesystem::path(folder_name);
+    full_path = projects_path / folder_name;
 
-    // Create folder
-    create_folder();
+    if (std::filesystem::exists(full_path)){
+        std::filesystem::remove(full_path);
+    }
+    else {
+        std::cout << "The file you are trying to delete does not exist." << std::endl;
+    }
+}
+
+int main() {
+
+    std::cout << "Would you like to Create or Delete a folder? (C, D): ";
+    std::cin >> output;
+
+    if (output == "c" || output == "C"){
+        // Create folder
+        create_folder();
 
 
-    std::cout << "Folder creation process completed!" << std::endl;
-    std::cout << "Press Enter to exit..." << std::endl;
-    std::cin.ignore();
+        std::cout << "Folder creation process completed!" << std::endl;
+        std::cout << "Press Enter to exit..." << std::endl;
+        std::cin.ignore();
+    }
+    else if (output == "d" || output == "D"){
+        delete_folder();
 
+        std::cout << "Folder Deletion Complete!" << std::endl;
+        std::cout << "Press Enter to exit..." << std::endl;
+        std::cin.ignore();
+    }
 
     return 0;
 }
